@@ -23,15 +23,21 @@ public class User {
     @GeneratedValue(generator = "user_id", strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long userId;
+    @Column(unique = true)
     private String login;
     private String password;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_playlist",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "playlist_id"))
+    @ToString.Exclude
     private Set<Playlist> playlist;
 
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,4 +50,5 @@ public class User {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

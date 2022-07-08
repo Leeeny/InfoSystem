@@ -23,7 +23,7 @@ public class Playlist{
     private Long playlistId;
     @Column(nullable = false)
     private String name;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_track",
             joinColumns = @JoinColumn(name = "playlist_id"),

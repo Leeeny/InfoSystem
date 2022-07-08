@@ -26,13 +26,13 @@ public class Track {
     private String artist;
     @Column(nullable = false)
     private Long time;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "track_style",
             joinColumns = @JoinColumn(name = "track_id"),
             inverseJoinColumns = @JoinColumn(name = "style_id", nullable = true))
     private Set<Style> styles;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="album_id", nullable=true)
     private Album albums;
 
