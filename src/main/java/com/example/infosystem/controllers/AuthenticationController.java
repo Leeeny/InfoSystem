@@ -30,11 +30,6 @@ public class AuthenticationController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepo userRepo;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     JwtUtils jwtUtils;
 
     @PostMapping("/auth")
@@ -43,15 +38,11 @@ public class AuthenticationController {
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         loginRequest.getLogin(),
                         loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         return ResponseEntity.ok(new JWTResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername()));
     }
-
 }

@@ -37,11 +37,7 @@ public class UserController {
         User user = new User(userDto.getLogin(),
                 passwordEncoder.encode(userDto.getPassword()));
         userRepo.save(user);
+        //redirect to home page
         return ResponseEntity.ok(new MessageResponse("User CREATED"));
-    }
-
-    @GetMapping("/user/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
     }
 }

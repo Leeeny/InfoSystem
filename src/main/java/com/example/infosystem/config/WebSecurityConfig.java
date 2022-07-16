@@ -50,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
+    //.formLogin() loginpage()
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -60,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers("/homepage/**").hasAuthority("USER")
+                .antMatchers("/settings/**").hasAuthority("USER")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

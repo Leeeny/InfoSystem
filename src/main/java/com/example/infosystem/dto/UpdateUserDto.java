@@ -8,8 +8,7 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-public class UserDto {
-    private Long id;
+public class UpdateUserDto {
+    private Long userId;
     private String login;
-    private String password;
 }

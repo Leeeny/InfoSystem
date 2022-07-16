@@ -5,9 +5,10 @@ import com.example.infosystem.dto.UserDto;
 import com.example.infosystem.entity.User;
 import com.example.infosystem.repos.UserRepo;
 import com.example.infosystem.services.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
