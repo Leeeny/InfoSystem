@@ -18,4 +18,6 @@ public interface PlaylistRepo extends JpaRepository<Playlist, Long> {
     @Modifying
     @Query(value = "delete from user_playlist p where p.playlist_id=?1 and p.user_id =?2", nativeQuery = true)
     void deletePlaylistByPlaylistId(Long playlistId, Long userId);
+
+    boolean existsByPlaylistId(Long playlistId);
 }

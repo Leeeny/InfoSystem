@@ -36,14 +36,16 @@ public class PlaylistController {
     @GetMapping("/myPlaylist")
     public Set<PlaylistDto> getUserPlaylists() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findUserByLogin(authentication.getName()).orElseThrow(() -> new Exception("Пользователь не найден"));
+        User user = userRepo.findUserByLogin(authentication.getName()).
+                orElseThrow(() -> new Exception("Пользователь не найден"));
         return PlaylistConverter.toDtos(user.getPlaylist());
     }
 
     @PutMapping("/myPlaylist/{playlistId}")
     public ResponseEntity<MessageResponse> updatePlaylist(@PathVariable Long playlistId,
                                                           @RequestBody PlaylistDto playlistDto) throws Exception {
-        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).orElseThrow(() -> new RuntimeException("Плейлист не найден"));
+        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).
+                orElseThrow(() -> new RuntimeException("Плейлист не найден"));
         playlistRepo.save(PlaylistConverter.toEntity(playlistDto));
         return ResponseEntity.ok(new MessageResponse("Playlist UPDATED"));
     }
@@ -51,8 +53,10 @@ public class PlaylistController {
     @PutMapping("/myPlaylist/set")
     public ResponseEntity<MessageResponse> setExistedPlaylistToUser(@RequestBody PlaylistIdDto playlistId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findUserByLogin(authentication.getName()).orElseThrow(() -> new Exception("Пользователь не найден"));
-        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId.getPlaylistId()).orElseThrow(() -> new RuntimeException("Плейлист не найден"));
+        User user = userRepo.findUserByLogin(authentication.getName()).
+                orElseThrow(() -> new Exception("Пользователь не найден"));
+        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId.getPlaylistId()).
+                orElseThrow(() -> new RuntimeException("Плейлист не найден"));
         playlistService.updateUserPlaylistTable(user.getUserId(), playlist.getPlaylistId());
         return ResponseEntity.ok(new MessageResponse("User playlists UPDATED"));
     }
@@ -60,10 +64,26 @@ public class PlaylistController {
     @DeleteMapping("/myPlaylist/{playlistId}")
     public ResponseEntity<MessageResponse> deleteExistedPlaylistFromUser(@PathVariable Long playlistId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findUserByLogin(authentication.getName()).orElseThrow(() -> new Exception("Пользователь не найден"));
-        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).orElseThrow(() -> new RuntimeException("Плейлист не найден"));
+        User user = userRepo.findUserByLogin(authentication.getName()).
+                orElseThrow(() -> new Exception("Пользователь не найден"));
+        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).
+                orElseThrow(() -> new RuntimeException("Плейлист не найден"));
         playlistRepo.deletePlaylistByPlaylistId(playlistId, user.getUserId());
         return ResponseEntity.ok(new MessageResponse("Playlist DELETED from user"));
     }
 
+    @PutMapping("/new")
+    public ResponseEntity<MessageResponse> createNewPlaylistToUser(@RequestBody PlaylistDto playlistDto) throws Exception {
+        if(playlistRepo.existsByPlaylistId(playlistDto.getPlaylistId())){
+            return ResponseEntity.
+                    badRequest().
+                    body(new MessageResponse("Плейлист с таким id уже существует"));
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findUserByLogin(authentication.getName()).
+                orElseThrow(() -> new Exception("Пользователь не найден"));
+        playlistRepo.save(PlaylistConverter.toEntity(playlistDto));
+        playlistService.updateUserPlaylistTable(user.getUserId(), playlistDto.getPlaylistId());
+        return ResponseEntity.ok(new MessageResponse("Playlist CREATED AND ADDED TO USER"));
+    }
 }
