@@ -19,10 +19,10 @@ public class Album {
     private Long albumId;
     @Column(nullable = false)
     private String name;
-    @OneToMany(mappedBy = "trackId")
+    @OneToMany(mappedBy = "trackId", cascade = CascadeType.ALL)
     @Column(nullable = false)
     private Set<Track> tracks;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<Style> styles;
 
 }

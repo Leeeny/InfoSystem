@@ -37,7 +37,7 @@ public class UserSettingsController {
         return ResponseEntity.ok(new MessageResponse("User UPDATED"));
     }
 
-    @PutMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<MessageResponse> deleteUser(@RequestBody DeleteUserDto userDto) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepo.findUserByLogin(authentication.getName()).orElseThrow(() -> new Exception("Пользователь не найден"));

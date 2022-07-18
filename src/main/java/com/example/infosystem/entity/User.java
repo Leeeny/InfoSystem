@@ -26,7 +26,7 @@ public class User {
     @Column(unique = true)
     private String login;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_playlist",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
