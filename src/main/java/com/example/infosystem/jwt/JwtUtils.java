@@ -1,6 +1,6 @@
 package com.example.infosystem.jwt;
 
-import com.example.infosystem.implementations.UserDetailsImpl;
+import com.example.infosystem.jwt.implementations.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;

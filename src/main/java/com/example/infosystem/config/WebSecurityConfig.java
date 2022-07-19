@@ -1,7 +1,7 @@
 package com.example.infosystem.config;
 
 
-import com.example.infosystem.implementations.UserDetailsServiceImpl;
+import com.example.infosystem.jwt.implementations.UserDetailsServiceImpl;
 import com.example.infosystem.jwt.AuthEntryPointJwt;
 import com.example.infosystem.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/homepage/**").authenticated()
                 .antMatchers("/settings/**").authenticated()
                 .antMatchers("/playlist/**").authenticated()
+                .antMatchers("/tracks/**").authenticated()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

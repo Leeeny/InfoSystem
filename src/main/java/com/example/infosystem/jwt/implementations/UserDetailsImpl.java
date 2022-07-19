@@ -1,4 +1,4 @@
-package com.example.infosystem.implementations;
+package com.example.infosystem.jwt.implementations;
 
 import com.example.infosystem.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

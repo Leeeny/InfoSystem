@@ -1,6 +1,6 @@
 package com.example.infosystem.jwt;
 
-import com.example.infosystem.implementations.UserDetailsServiceImpl;
+import com.example.infosystem.jwt.implementations.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

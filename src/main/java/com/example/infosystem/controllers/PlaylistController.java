@@ -1,12 +1,16 @@
 package com.example.infosystem.controllers;
 
 import com.example.infosystem.converter.PlaylistConverter;
+import com.example.infosystem.converter.TrackConverter;
 import com.example.infosystem.dto.MessageResponse;
 import com.example.infosystem.dto.PlaylistDto;
 import com.example.infosystem.dto.PlaylistIdDto;
+import com.example.infosystem.dto.TrackDto;
 import com.example.infosystem.entity.Playlist;
+import com.example.infosystem.entity.Track;
 import com.example.infosystem.entity.User;
 import com.example.infosystem.repos.PlaylistRepo;
+import com.example.infosystem.repos.TrackRepo;
 import com.example.infosystem.repos.UserRepo;
 import com.example.infosystem.services.PlaylistService;
 import lombok.AllArgsConstructor;
@@ -31,6 +35,9 @@ public class PlaylistController {
     PlaylistService playlistService;
 
     @Autowired
+    TrackRepo trackRepo;
+
+    @Autowired
     PlaylistRepo playlistRepo;
 
     @GetMapping("/myPlaylist")
@@ -50,6 +57,25 @@ public class PlaylistController {
         return ResponseEntity.ok(new MessageResponse("Playlist UPDATED"));
     }
 
+    @PutMapping("/myPlaylist/{playlistId}/newTrack")
+    public ResponseEntity<MessageResponse> createNewTrackInPlaylist(@PathVariable Long playlistId,
+                                                                    @RequestBody TrackDto trackDto) throws Exception {
+        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).
+                orElseThrow(() -> new RuntimeException("Плейлист не найден"));
+        trackRepo.save(TrackConverter.toEntity(trackDto));
+        playlistService.createNewTrackInPlaylist(playlistId, trackDto.getTrackId());
+        return ResponseEntity.ok(new MessageResponse("New Track in Playlist CREATED"));
+    }
+
+    @DeleteMapping("/myPlaylist/{playlistId}/deleteTrack/{trackId}")
+    public ResponseEntity<MessageResponse> deleteTrackFromPlaylist(@PathVariable Long playlistId,
+                                                                    @PathVariable Long trackId) throws Exception {
+        Playlist playlist = playlistRepo.getPlaylistByPlaylistId(playlistId).
+                orElseThrow(() -> new RuntimeException("Плейлист не найден"));
+        playlistService.deleteTrackFromPlaylist(playlistId, trackId);
+        return ResponseEntity.ok(new MessageResponse("Track Deleted from Playlist"));
+    }
+
     @PutMapping("/myPlaylist/set")
     public ResponseEntity<MessageResponse> setExistedPlaylistToUser(@RequestBody PlaylistIdDto playlistId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,6 +86,7 @@ public class PlaylistController {
         playlistService.updateUserPlaylistTable(user.getUserId(), playlist.getPlaylistId());
         return ResponseEntity.ok(new MessageResponse("User playlists UPDATED"));
     }
+
 
     @DeleteMapping("/myPlaylist/{playlistId}")
     public ResponseEntity<MessageResponse> deleteExistedPlaylistFromUser(@PathVariable Long playlistId) throws Exception {

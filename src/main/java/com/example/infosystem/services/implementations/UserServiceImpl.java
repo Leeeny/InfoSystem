@@ -1,4 +1,4 @@
-package com.example.infosystem.implementations;
+package com.example.infosystem.services.implementations;
 
 import com.example.infosystem.converter.UserConverter;
 import com.example.infosystem.dto.UserDto;
